@@ -25,10 +25,10 @@ set VERSION     2025.07.22
 
 ### at runtime, can set these flags, if passed as run-time parameters
 set DEBUG 0
-set NOGPIB 0
+set NOGPIB 1
 foreach arg $argv {
   if {"$arg"=="DEBUG"}  { set DEBUG 1 }
-  if {"$arg"=="NOGPIB"} { set NOGPIB 1 }
+  if {"$arg"=="GPIB"} { set NOGPIB 0 }
   }
 
 if {$DEBUG} {puts stderr "DEBUG: $APPNAME@$PLATFORM invoked with DEBUG"}
@@ -1118,6 +1118,7 @@ set i 1
 foreach paramName [dict keys $settings] {
   global $paramName ${paramName}_h
   if {"$paramName"=="wmG"} {continue}; # skip over the wm geometry, keep it internal
+  if {"$paramName"=="gpibCommands" && $NOGPIB} {continue}; # if NOGPIB, hide GPIB controls
   label .ts.settings.l_${paramName} -text "$paramName"
   entry .ts.settings.v_${paramName} -textvariable $paramName
   label .ts.settings.h_${paramName} -text [set [set paramName]_h]
